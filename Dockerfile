@@ -1,4 +1,4 @@
-FROM golang:1.16-buster AS build
+FROM golang:alpine3.15 AS build
 
 WORKDIR /app
 
@@ -6,9 +6,9 @@ RUN go env -w GO111MODULE=off
 
 COPY *.go ./
 
-RUN go build -o /release
+RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /release
 
-FROM busybox:stable-uclibc
+FROM scratch
 
 WORKDIR /
 
